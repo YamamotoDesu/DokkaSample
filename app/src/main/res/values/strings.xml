@@ -1,0 +1,21 @@
+<resources>
+  <string name="app_name">notktx</string>
+  <string name="notktx_utilities_samples_label">:notktx:utilities samples</string>
+  <string name="notktx_core_samples_label">:notktx:core samples</string>
+  <string name="email_intent_label">Email Intent</string>
+  <string name="url_intent_label">Url Intent</string>
+  <string name="load_image_label">Load image</string>
+  <string name="load_round_image_label">Load round image</string>
+  <string name="commit_prefs_label">Commit prefs value</string>
+  <string name="apply_prefs_label">Apply prefs value</string>
+  <string name="enter_prefs_hint">Enter prefs value here</string>
+  <string name="empty_prefs_label">Empty prefs</string>
+  <string name="show_short_toast_label">Show short toast</string>
+  <string name="show_long_toast_label">Show long toast</string>
+  <string name="show_label">Show</string>
+  <string name="hide_label">Hide</string>
+  <string name="remove_label">Remove</string>
+  <string name="show_viewgroup_children_label">Show Viewgroup\'s Children</string>
+  <string name="dummy_text_view_label">Dummy text view</string>
+  <string name="long_toast_message">Message taken from a string resource</string>
+</resources>

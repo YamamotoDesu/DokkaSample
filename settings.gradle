@@ -1,0 +1,4 @@
+rootProject.name='notktx'
+include ':app'
+include ':utilities'
+include ':core'

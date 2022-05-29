@@ -1,0 +1,129 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+  ext {
+    kotlin_version = '1.6.10'
+    compileSdkVersion = 31
+    targetSdkVersion = compileSdkVersion
+    minSdkVersion = 19
+    // DONE:18 Add a custom footer message and path to the newly added css file
+    customFooterMessage = "Made with ❤️ at raywenderlich.com"
+    customLogoFile = projectDir.toString() + "/logo-style.css"
+  }
+
+  repositories {
+    google()
+    mavenCentral()
+  }
+
+  dependencies {
+    classpath "com.android.tools.build:gradle:7.0.4"
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    // DONE:5 Add dokka gradle plugin classpath
+    classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.6.0"
+  }
+}
+
+// DONE:6 Apply dokka plugin
+apply plugin: "org.jetbrains.dokka"
+
+
+allprojects {
+  repositories {
+    google()
+    mavenCentral()
+  }
+}
+
+subprojects {
+  apply from: file("../publish.gradle")
+  // DONE:7 Add dokka plugin to each module
+  apply plugin: "org.jetbrains.dokka"
+
+
+  // DONE:8 Override dokkaHtml task and add custom output directory
+  tasks.named("dokkaHtml") {
+    // DONE:19 Add pluginsMapConfigurations for dokkaHtml, dokkaHtmlPartial
+    pluginsMapConfiguration.set(
+        [
+            "org.jetbrains.dokka.base.DokkaBase": """{
+      "footerMessage": "$customFooterMessage",
+      "customStyleSheets": ["$customLogoFile"]
+     }"""
+        ]
+    )
+    outputDirectory.set(file("$rootProject.name-$project.name-dokka"))
+    // DONE:17 Add custom naming format for modules
+    moduleName.set("$rootProject.name-$project.name")
+    // DONE:13 Set suppressInheritedMembers to true in both the tasks
+    suppressInheritedMembers.set(true)
+    dokkaSourceSets {
+      named("main") {
+        // DONE:14 Set includeNonPublic to true in both the tasks
+        includeNonPublic.set(true)
+        // DONE:16 Use custom markdown files for modules/packages
+        includes.from("module.md")
+        externalDocumentationLink {
+          url.set(new URL("https://square.github.io/picasso/2.x/picasso/"))
+        }
+        externalDocumentationLink {
+          url.set(new URL("https://bumptech.github.io/glide/javadocs/4120/"))
+        }
+      }
+    }
+  }
+
+  // DONE:10 Override dokkaHtmlPartial task and add external documentation in it and dokkaHtml both
+  tasks.named("dokkaHtmlPartial") {
+    // DONE:19 Add pluginsMapConfigurations for dokkaHtml, dokkaHtmlPartial
+    pluginsMapConfiguration.set(
+        [
+            "org.jetbrains.dokka.base.DokkaBase": """{
+      "footerMessage": "$customFooterMessage",
+      "customStyleSheets": ["$customLogoFile"]
+     }"""
+        ]
+    )
+    // DONE:17 Add custom naming format for modules
+    moduleName.set("$rootProject.name-$project.name")
+    // DONE:13 Set suppressInheritedMembers to true in both the tasks
+    suppressInheritedMembers.set(true)
+    dokkaSourceSets {
+      named("main") {
+        // DONE:14 Set includeNonPublic to true in both the tasks
+        includeNonPublic.set(true)
+        // DONE:16 Use custom markdown files for modules/packages
+        includes.from("module.md")
+        externalDocumentationLink {
+          url.set(new URL("https://square.github.io/picasso/2.x/picasso/"))
+        }
+        externalDocumentationLink {
+          url.set(new URL("https://bumptech.github.io/glide/javadocs/4120/"))
+        }
+      }
+    }
+  }
+}
+
+// DONE:20 Configure dokkaHtmlMultiModule task and add pluginsMapConfigurations in it
+afterEvaluate {
+  tasks.named("dokkaHtmlMultiModule") {
+    pluginsMapConfiguration.set(
+        [
+            "org.jetbrains.dokka.base.DokkaBase": """{
+          "footerMessage": "$customFooterMessage",
+          "customStyleSheets": ["$customLogoFile"]
+         }"""
+        ]
+    )
+  }
+}
+
+// DONE:9 Add a task to remove custom documentation output directory and add it as a dependency in the clean task below
+task cleanDokkaModuleDocs() {
+  subprojects {
+    delete file("$rootProject.name-$project.name-dokka")
+  }
+}
+task clean(type: Delete, dependsOn: cleanDokkaModuleDocs) {
+  delete rootProject.buildDir
+}
